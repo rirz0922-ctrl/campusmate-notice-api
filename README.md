@@ -1,32 +1,38 @@
-# CampusMate Notice API
+# CampusMate Notice API v2
 
-CampusMate MVP용 학교 공지 추천 API입니다.
+CampusMate MVP용 충남대 공지 추천 API입니다.
 
-## 1. 로컬 실행
+## 로컬 실행
 
 ```bash
 pip install -r requirements.txt
-uvicorn main:app --reload
+python -m uvicorn main:app --reload
 ```
 
-실행 후 접속:
+## 주요 엔드포인트
+
+### 기본 확인
 
 ```text
-http://127.0.0.1:8000
+GET /
 ```
 
-## 2. 주요 엔드포인트
-
-### 전체 공지
+### 샘플 + live 공지
 
 ```text
-GET /notices
+GET /notices?live=true
 ```
 
-예시:
+### 충남대 학사정보 게시판 크롤링
 
 ```text
-http://127.0.0.1:8000/notices
+GET /live-notices
+```
+
+### 충남대 학사일정 크롤링
+
+```text
+GET /calendar
 ```
 
 ### 맞춤 추천
@@ -35,24 +41,14 @@ http://127.0.0.1:8000/notices
 GET /recommendations?department=computer&grade=3&interest=backend
 ```
 
-예시:
+## Render Start Command
 
-```text
-http://127.0.0.1:8000/recommendations?department=computer&grade=3&interest=backend
+```bash
+uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
 
-## 3. 교내 AI 외부 API 등록
+## 주의
 
-배포 후 Base URL에는 배포 주소를 입력합니다.
-
-예:
-
-```text
-https://campusmate-notice-api.onrender.com
-```
-
-## 4. 현재 MVP 방식
-
-현재는 실제 충남대 공지 크롤링이 아니라 샘플 공지 데이터를 사용합니다.
-
-이후 실제 구현에서는 충남대 학사공지, 학과공지, 비교과 프로그램 데이터를 수집하여 NOTICES 데이터를 자동 갱신하는 방식으로 확장합니다.
+v2는 충남대 공개 페이지를 실시간으로 요청합니다.
+학교 페이지 구조가 바뀌면 파싱 결과가 달라질 수 있습니다.
+실제 서비스에서는 주기적 수집 + DB 저장 방식으로 개선하는 것이 좋습니다.
